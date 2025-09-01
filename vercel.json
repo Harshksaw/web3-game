@@ -1,0 +1,19 @@
+{
+  "buildCommand": "yarn workspace @se-2/nextjs build",
+  "devCommand": "yarn workspace @se-2/nextjs dev",
+  "installCommand": "yarn install",
+  "outputDirectory": "packages/nextjs/.next",
+  "framework": "nextjs",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./packages/nextjs/",
+  "regions": ["iad1"],
+  "build": {
+    "env": {
+      "YARN_ENABLE_IMMUTABLE_INSTALLS": "false",
+      "ENABLE_EXPERIMENTAL_COREPACK": "1",
+      "VERCEL_TELEMETRY_DISABLED": "1"
+    }
+  },
+  "env": {
+    "NODE_VERSION": "20.18.3"
+  }
+}
