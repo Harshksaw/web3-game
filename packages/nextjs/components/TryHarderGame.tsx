@@ -351,7 +351,7 @@ const TryHarderGame: React.FC = () => {
     };
   }, [gameLoop, gameState.isPlaying, gameState.gameOver]);
 
-  const startGame = () => {
+  const startGame = useCallback(() => {
     const grid = generateMaze();
     gridRef.current = grid;
 
@@ -374,15 +374,15 @@ const TryHarderGame: React.FC = () => {
       score: 0,
       timeElapsed: 0,
     }));
-  };
+  }, []);
 
-  const restartGame = () => {
+  const restartGame = useCallback(() => {
     setGameState(prev => ({
       ...prev,
       level: prev.victory ? prev.level + 1 : prev.level,
     }));
     startGame();
-  };
+  }, [startGame]);
 
   const resetGame = () => {
     setGameState(prev => ({
