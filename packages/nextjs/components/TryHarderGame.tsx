@@ -101,10 +101,14 @@ const TryHarderGame: React.FC = () => {
 
       // Handle restart
       if ((e.key === " " || e.key === "Enter") && gameState.gameOver) {
-        restartGame();
+        setGameState(prev => ({
+          ...prev,
+          level: prev.victory ? prev.level + 1 : prev.level,
+        }));
+        startGame();
       }
     },
-    [gameState.isPlaying, gameState.gameOver, restartGame],
+    [gameState.isPlaying, gameState.gameOver, startGame],
   );
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {
@@ -376,13 +380,13 @@ const TryHarderGame: React.FC = () => {
     }));
   }, []);
 
-  const restartGame = useCallback(() => {
+  const restartGame = () => {
     setGameState(prev => ({
       ...prev,
       level: prev.victory ? prev.level + 1 : prev.level,
     }));
     startGame();
-  }, [startGame]);
+  };
 
   const resetGame = () => {
     setGameState(prev => ({
