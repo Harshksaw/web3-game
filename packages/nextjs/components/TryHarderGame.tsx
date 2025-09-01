@@ -83,6 +83,31 @@ const TryHarderGame: React.FC = () => {
     }
   }, []);
 
+  const startGame = useCallback(() => {
+    const grid = generateMaze();
+    gridRef.current = grid;
+
+    playerRef.current = {
+      x: grid.startX * cellSize,
+      y: grid.startY * cellSize,
+      size: 20,
+      shiftUsed: false,
+      shiftActive: false,
+      shiftTimer: 0,
+    };
+
+    startTimeRef.current = Date.now();
+
+    setGameState(prev => ({
+      ...prev,
+      isPlaying: true,
+      gameOver: false,
+      victory: false,
+      score: 0,
+      timeElapsed: 0,
+    }));
+  }, []);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       // Prevent default behavior for game keys to stop page scrolling
@@ -354,31 +379,6 @@ const TryHarderGame: React.FC = () => {
       }
     };
   }, [gameLoop, gameState.isPlaying, gameState.gameOver]);
-
-  const startGame = useCallback(() => {
-    const grid = generateMaze();
-    gridRef.current = grid;
-
-    playerRef.current = {
-      x: grid.startX * cellSize,
-      y: grid.startY * cellSize,
-      size: 20,
-      shiftUsed: false,
-      shiftActive: false,
-      shiftTimer: 0,
-    };
-
-    startTimeRef.current = Date.now();
-
-    setGameState(prev => ({
-      ...prev,
-      isPlaying: true,
-      gameOver: false,
-      victory: false,
-      score: 0,
-      timeElapsed: 0,
-    }));
-  }, []);
 
   const restartGame = () => {
     setGameState(prev => ({
