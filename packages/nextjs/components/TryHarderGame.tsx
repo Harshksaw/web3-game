@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { TrophyIcon, PlayIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { PlayIcon } from "@heroicons/react/24/outline";
 
 interface GameState {
   isPlaying: boolean;
@@ -36,15 +36,24 @@ const TryHarderGame: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameLoopRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const playerRef = useRef<Player>({ 
-    x: 50, y: 50, size: 20, 
-    shiftUsed: false, shiftActive: false, shiftTimer: 0 
+  const playerRef = useRef<Player>({
+    x: 50,
+    y: 50,
+    size: 20,
+    shiftUsed: false,
+    shiftActive: false,
+    shiftTimer: 0,
   });
-  const gridRef = useRef<GameGrid>({ 
-    walls: [], startX: 1, startY: 1, exitX: 15, exitY: 15, gridSize: 25 
+  const gridRef = useRef<GameGrid>({
+    walls: [],
+    startX: 1,
+    startY: 1,
+    exitX: 15,
+    exitY: 15,
+    gridSize: 25,
   });
   const startTimeRef = useRef<number>(Date.now());
-  
+
   const [gameState, setGameState] = useState<GameState>({
     isPlaying: false,
     gameOver: false,
@@ -74,26 +83,29 @@ const TryHarderGame: React.FC = () => {
     }
   }, []);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    // Prevent default behavior for game keys to stop page scrolling
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'a', 's', 'd', ' ', 'Shift'].includes(e.key)) {
-      e.preventDefault();
-    }
-    
-    setKeys(prev => ({ ...prev, [e.key.toLowerCase()]: true }));
-    
-    // Handle shift ability
-    if ((e.key === "Shift" || e.key === " ") && !playerRef.current.shiftUsed && gameState.isPlaying) {
-      playerRef.current.shiftActive = true;
-      playerRef.current.shiftUsed = true;
-      playerRef.current.shiftTimer = 120; // 2 seconds at 60fps
-    }
-    
-    // Handle restart
-    if ((e.key === " " || e.key === "Enter") && gameState.gameOver) {
-      restartGame();
-    }
-  }, [gameState.isPlaying, gameState.gameOver]);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      // Prevent default behavior for game keys to stop page scrolling
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d", " ", "Shift"].includes(e.key)) {
+        e.preventDefault();
+      }
+
+      setKeys(prev => ({ ...prev, [e.key.toLowerCase()]: true }));
+
+      // Handle shift ability
+      if ((e.key === "Shift" || e.key === " ") && !playerRef.current.shiftUsed && gameState.isPlaying) {
+        playerRef.current.shiftActive = true;
+        playerRef.current.shiftUsed = true;
+        playerRef.current.shiftTimer = 120; // 2 seconds at 60fps
+      }
+
+      // Handle restart
+      if ((e.key === " " || e.key === "Enter") && gameState.gameOver) {
+        restartGame();
+      }
+    },
+    [gameState.isPlaying, gameState.gameOver, restartGame],
+  );
 
   const handleKeyUp = useCallback((e: KeyboardEvent) => {
     setKeys(prev => ({ ...prev, [e.key.toLowerCase()]: false }));
@@ -110,7 +122,7 @@ const TryHarderGame: React.FC = () => {
 
   const generateMaze = (): GameGrid => {
     const walls: boolean[][] = [];
-    
+
     // Initialize all cells as no walls
     for (let x = 0; x < gridCols; x++) {
       walls[x] = [];
@@ -118,7 +130,7 @@ const TryHarderGame: React.FC = () => {
         walls[x][y] = false;
       }
     }
-    
+
     // Add border walls
     for (let x = 0; x < gridCols; x++) {
       walls[x][0] = true; // top border
@@ -128,42 +140,42 @@ const TryHarderGame: React.FC = () => {
       walls[0][y] = true; // left border
       walls[gridCols - 1][y] = true; // right border
     }
-    
+
     // Add random walls
     for (let i = 0; i < 60; i++) {
       const x = Math.floor(Math.random() * (gridCols - 2)) + 1;
       const y = Math.floor(Math.random() * (gridRows - 2)) + 1;
       walls[x][y] = true;
     }
-    
+
     const startX = 1;
     const startY = 1;
     const exitX = gridCols - 2;
     const exitY = gridRows - 2;
-    
+
     // Ensure start and exit are clear
     walls[startX][startY] = false;
     walls[exitX][exitY] = false;
-    
+
     return {
       walls,
       startX,
       startY,
       exitX,
       exitY,
-      gridSize: cellSize
+      gridSize: cellSize,
     };
   };
 
   const checkWallCollision = (x: number, y: number, size: number): boolean => {
     if (playerRef.current.shiftActive) return false;
-    
+
     const grid = gridRef.current;
     const leftCol = Math.floor(x / cellSize);
     const rightCol = Math.floor((x + size) / cellSize);
     const topRow = Math.floor(y / cellSize);
     const bottomRow = Math.floor((y + size) / cellSize);
-    
+
     for (let col = leftCol; col <= rightCol; col++) {
       for (let row = topRow; row <= bottomRow; row++) {
         if (col >= 0 && col < gridCols && row >= 0 && row < gridRows) {
@@ -173,7 +185,7 @@ const TryHarderGame: React.FC = () => {
         }
       }
     }
-    
+
     // Check boundaries
     return x < 0 || y < 0 || x + size > gameWidth || y + size > gameHeight;
   };
@@ -182,13 +194,8 @@ const TryHarderGame: React.FC = () => {
     const grid = gridRef.current;
     const exitPixelX = grid.exitX * cellSize;
     const exitPixelY = grid.exitY * cellSize;
-    
-    return (
-      x + size > exitPixelX &&
-      x < exitPixelX + cellSize &&
-      y + size > exitPixelY &&
-      y < exitPixelY + cellSize
-    );
+
+    return x + size > exitPixelX && x < exitPixelX + cellSize && y + size > exitPixelY && y < exitPixelY + cellSize;
   };
 
   const gameLoop = useCallback(() => {
@@ -283,7 +290,7 @@ const TryHarderGame: React.FC = () => {
 
     // Draw grid
     const grid = gridRef.current;
-    
+
     // Draw walls
     ctx.fillStyle = player.shiftActive ? "#ef4444" : "#1f2937";
     for (let x = 0; x < gridCols; x++) {
@@ -306,8 +313,12 @@ const TryHarderGame: React.FC = () => {
     if (player.shiftActive) {
       // Glowing effect when shift is active
       const gradient = ctx.createRadialGradient(
-        player.x + player.size/2, player.y + player.size/2, 0,
-        player.x + player.size/2, player.y + player.size/2, player.size
+        player.x + player.size / 2,
+        player.y + player.size / 2,
+        0,
+        player.x + player.size / 2,
+        player.y + player.size / 2,
+        player.size,
       );
       gradient.addColorStop(0, "#fbbf24");
       gradient.addColorStop(1, "#f59e0b");
@@ -332,7 +343,7 @@ const TryHarderGame: React.FC = () => {
     if (gameState.isPlaying && !gameState.gameOver) {
       gameLoopRef.current = requestAnimationFrame(gameLoop);
     }
-    
+
     return () => {
       if (gameLoopRef.current) {
         cancelAnimationFrame(gameLoopRef.current);
@@ -343,7 +354,7 @@ const TryHarderGame: React.FC = () => {
   const startGame = () => {
     const grid = generateMaze();
     gridRef.current = grid;
-    
+
     playerRef.current = {
       x: grid.startX * cellSize,
       y: grid.startY * cellSize,
@@ -352,9 +363,9 @@ const TryHarderGame: React.FC = () => {
       shiftActive: false,
       shiftTimer: 0,
     };
-    
+
     startTimeRef.current = Date.now();
-    
+
     setGameState(prev => ({
       ...prev,
       isPlaying: true,
@@ -397,20 +408,20 @@ const TryHarderGame: React.FC = () => {
   };
 
   return (
-    <div ref={containerRef} className={`w-full max-w-4xl mx-auto ${isFullscreen ? 'fullscreen-game' : ''}`}>
+    <div ref={containerRef} className={`w-full max-w-4xl mx-auto ${isFullscreen ? "fullscreen-game" : ""}`}>
       <div className="bg-base-100 rounded-2xl shadow-2xl overflow-hidden">
         <div className="relative bg-gradient-to-b from-base-300 to-base-200 p-6">
           {/* Fullscreen Toggle */}
           <div className="absolute top-2 right-2 z-10">
-            <button 
+            <button
               onClick={toggleFullscreen}
               className="btn btn-sm btn-circle btn-primary opacity-70 hover:opacity-100"
               title="Toggle Fullscreen"
             >
-              {isFullscreen ? '⤢' : '⤢'}
+              {isFullscreen ? "⤢" : "⤢"}
             </button>
           </div>
-          
+
           <canvas
             ref={canvasRef}
             width={gameWidth}
@@ -418,7 +429,7 @@ const TryHarderGame: React.FC = () => {
             className="w-full border-2 border-base-content/10 rounded-xl shadow-lg bg-slate-800"
             style={{ maxWidth: "100%", height: "auto", aspectRatio: `${gameWidth}/${gameHeight}` }}
           />
-          
+
           {!gameState.isPlaying && !gameState.gameOver && (
             <div className="absolute inset-0 flex items-center justify-center bg-base-100/90 rounded-lg">
               <div className="text-center">
@@ -437,27 +448,21 @@ const TryHarderGame: React.FC = () => {
           {gameState.gameOver && (
             <div className="absolute inset-0 flex items-center justify-center bg-base-100/95 rounded-lg">
               <div className="text-center">
-                <div className="text-6xl mb-4">
-                  {gameState.victory ? '🏆' : '💀'}
-                </div>
-                <p className="text-3xl font-bold mb-4">
-                  {gameState.victory ? 'YOU WIN!' : 'GAME OVER'}
-                </p>
+                <div className="text-6xl mb-4">{gameState.victory ? "🏆" : "💀"}</div>
+                <p className="text-3xl font-bold mb-4">{gameState.victory ? "YOU WIN!" : "GAME OVER"}</p>
                 <p className="text-lg mb-6">
                   Score: {gameState.score} • Time: {gameState.timeElapsed}s
                   {gameState.victory && ` • Level ${gameState.level}`}
                 </p>
                 <div className="flex gap-4 justify-center">
                   <button className="btn btn-primary btn-lg" onClick={restartGame}>
-                    {gameState.victory ? 'NEXT LEVEL' : 'TRY AGAIN'}
+                    {gameState.victory ? "NEXT LEVEL" : "TRY AGAIN"}
                   </button>
                   <button className="btn btn-outline btn-lg" onClick={resetGame}>
                     RESTART
                   </button>
                 </div>
-                <p className="text-sm mt-4 text-base-content/70">
-                  Press SPACE or ENTER to restart
-                </p>
+                <p className="text-sm mt-4 text-base-content/70">Press SPACE or ENTER to restart</p>
               </div>
             </div>
           )}
@@ -483,17 +488,13 @@ const TryHarderGame: React.FC = () => {
               <div className="text-xl font-bold text-warning">{gameState.timeElapsed}s</div>
             </div>
           </div>
-          
+
           {gameState.isPlaying && (
             <div className="text-center">
               <p className="text-base font-medium text-base-content/80 mb-2">
                 WASD/Arrows to move • Shift for superpower • Reach the green exit
               </p>
-              {!playerRef.current.shiftUsed && (
-                <div className="badge badge-warning">
-                  Superpower Available! 
-                </div>
-              )}
+              {!playerRef.current.shiftUsed && <div className="badge badge-warning">Superpower Available!</div>}
             </div>
           )}
         </div>

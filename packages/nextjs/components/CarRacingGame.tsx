@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { TrophyIcon, PlayIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ArrowPathIcon, PlayIcon, TrophyIcon } from "@heroicons/react/24/outline";
 
 interface GameState {
   isPlaying: boolean;
@@ -41,7 +41,7 @@ const CarRacingGame: React.FC = () => {
   const obstaclesRef = useRef<Obstacle[]>([]);
   const coinsRef = useRef<Coin[]>([]);
   const carRef = useRef<Car>({ x: 280, y: 400, width: 45, height: 70 });
-  
+
   const [gameState, setGameState] = useState<GameState>({
     isPlaying: false,
     gameOver: false,
@@ -132,10 +132,12 @@ const CarRacingGame: React.FC = () => {
     }
 
     // Update obstacles
-    obstaclesRef.current = obstaclesRef.current.map(obstacle => ({
-      ...obstacle,
-      y: obstacle.y + obstacle.speed,
-    })).filter(obstacle => obstacle.y < gameHeight + 100);
+    obstaclesRef.current = obstaclesRef.current
+      .map(obstacle => ({
+        ...obstacle,
+        y: obstacle.y + obstacle.speed,
+      }))
+      .filter(obstacle => obstacle.y < gameHeight + 100);
 
     // Spawn new obstacles
     if (Math.random() < 0.02) {
@@ -143,10 +145,12 @@ const CarRacingGame: React.FC = () => {
     }
 
     // Update coins
-    coinsRef.current = coinsRef.current.map(coin => ({
-      ...coin,
-      y: coin.y + coin.speed,
-    })).filter(coin => coin.y < gameHeight + 50 && !coin.collected);
+    coinsRef.current = coinsRef.current
+      .map(coin => ({
+        ...coin,
+        y: coin.y + coin.speed,
+      }))
+      .filter(coin => coin.y < gameHeight + 50 && !coin.collected);
 
     // Spawn new coins
     if (Math.random() < 0.015) {
@@ -191,13 +195,13 @@ const CarRacingGame: React.FC = () => {
     // Draw road
     ctx.fillStyle = "#2d3748";
     ctx.fillRect(50, 0, gameWidth - 100, gameHeight);
-    
+
     // Draw road lines
     ctx.strokeStyle = "#f7fafc";
     ctx.lineWidth = 3;
     ctx.setLineDash([30, 25]);
     for (let i = 0; i < 5; i++) {
-      const x = 50 + (i + 1) * (gameWidth - 100) / 6;
+      const x = 50 + ((i + 1) * (gameWidth - 100)) / 6;
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, gameHeight);
@@ -253,10 +257,10 @@ const CarRacingGame: React.FC = () => {
     // Draw coins (enhanced)
     coinsRef.current.forEach(coin => {
       if (!coin.collected) {
-        const centerX = coin.x + coin.width/2;
-        const centerY = coin.y + coin.height/2;
-        const radius = coin.width/2;
-        
+        const centerX = coin.x + coin.width / 2;
+        const centerY = coin.y + coin.height / 2;
+        const radius = coin.width / 2;
+
         // Outer glow
         const gradient = ctx.createRadialGradient(centerX, centerY, radius * 0.3, centerX, centerY, radius * 1.5);
         gradient.addColorStop(0, "#fbbf24");
@@ -266,19 +270,19 @@ const CarRacingGame: React.FC = () => {
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius * 1.5, 0, Math.PI * 2);
         ctx.fill();
-        
+
         // Coin body
         ctx.fillStyle = "#fbbf24";
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         ctx.fill();
-        
+
         // Inner shine
         ctx.fillStyle = "#fde68a";
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius * 0.6, 0, Math.PI * 2);
         ctx.fill();
-        
+
         // ETH symbol
         ctx.fillStyle = "#f59e0b";
         ctx.font = `${radius}px Arial`;
@@ -303,7 +307,7 @@ const CarRacingGame: React.FC = () => {
     if (gameState.isPlaying && !gameState.gameOver) {
       gameLoopRef.current = requestAnimationFrame(gameLoop);
     }
-    
+
     return () => {
       if (gameLoopRef.current) {
         cancelAnimationFrame(gameLoopRef.current);
@@ -348,7 +352,7 @@ const CarRacingGame: React.FC = () => {
             className="w-full border-2 border-base-content/10 rounded-xl shadow-lg bg-slate-800"
             style={{ maxWidth: "100%", height: "auto", aspectRatio: `${gameWidth}/${gameHeight}` }}
           />
-          
+
           {!gameState.isPlaying && !gameState.gameOver && (
             <div className="absolute inset-0 flex items-center justify-center bg-base-100/90 rounded-lg">
               <div className="text-center">
@@ -415,7 +419,7 @@ const CarRacingGame: React.FC = () => {
               <div className="stat-value text-2xl text-accent font-bold">{gameState.tokensEarned.toFixed(3)} ETH</div>
             </div>
           </div>
-          
+
           {gameState.isPlaying && (
             <div className="text-center mt-4 p-3 bg-base-100/60 rounded-lg">
               <p className="text-base font-medium text-base-content/80">

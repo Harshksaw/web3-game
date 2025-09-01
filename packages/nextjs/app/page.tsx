@@ -3,13 +3,13 @@
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import { 
-  CubeIcon, 
-  CurrencyDollarIcon, 
-  TrophyIcon,
-  PlayIcon,
+import {
+  BoltIcon,
   ChartBarIcon,
-  BoltIcon 
+  CubeIcon,
+  CurrencyDollarIcon,
+  PlayIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 
@@ -29,11 +29,11 @@ const Home: NextPage = () => {
                   <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl"></div>
                 </div>
               </div>
-              
+
               <h1 className="text-6xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-6">
                 CryptoStake Gaming
               </h1>
-              
+
               <p className="text-xl text-base-content/80 mb-8 max-w-2xl mx-auto">
                 Stake your crypto, play exciting games, and earn rewards in the ultimate Web3 gaming experience.
               </p>
@@ -56,14 +56,14 @@ const Home: NextPage = () => {
               )}
 
               <div className="flex flex-wrap justify-center gap-4">
-                <button 
+                <button
                   className="btn btn-primary btn-lg px-8 shadow-lg hover:shadow-xl transition-all duration-300"
                   disabled={!connectedAddress}
                 >
                   <PlayIcon className="h-6 w-6" />
                   Start Playing
                 </button>
-                <button 
+                <button
                   className="btn btn-secondary btn-lg px-8 shadow-lg hover:shadow-xl transition-all duration-300"
                   disabled={!connectedAddress}
                 >
@@ -151,7 +151,7 @@ const Home: NextPage = () => {
                 <div className="stat-value text-primary">1,234 ETH</div>
                 <div className="stat-desc">↗︎ 400 (22%) this month</div>
               </div>
-              
+
               <div className="stat bg-base-100/80 rounded-2xl shadow-lg">
                 <div className="stat-figure text-secondary">
                   <TrophyIcon className="h-8 w-8" />
@@ -160,7 +160,7 @@ const Home: NextPage = () => {
                 <div className="stat-value text-secondary">5,678</div>
                 <div className="stat-desc">↗︎ 90 (14%) this week</div>
               </div>
-              
+
               <div className="stat bg-base-100/80 rounded-2xl shadow-lg">
                 <div className="stat-figure text-accent">
                   <CurrencyDollarIcon className="h-8 w-8" />
@@ -179,7 +179,7 @@ const Home: NextPage = () => {
             <h2 className="text-4xl font-bold text-base-content mb-4">Play & Earn Games</h2>
             <p className="text-lg text-base-content/70">Choose your game, stake your tokens, and start earning!</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Crypto Racer Game Card */}
             <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
@@ -199,7 +199,7 @@ const Home: NextPage = () => {
                 <p className="text-sm text-base-content/70 mb-4">
                   Race through traffic, collect coins, and earn crypto rewards. High-speed action meets DeFi rewards!
                 </p>
-                
+
                 <div className="grid grid-cols-2 gap-2 mb-4">
                   <div className="stat bg-base-200/50 rounded-lg p-2">
                     <div className="stat-title text-xs">Min Stake</div>
@@ -246,7 +246,7 @@ const Home: NextPage = () => {
                 <p className="text-sm text-base-content/70 mb-4">
                   Navigate deadly mazes with precision. One wrong move ends it all. Only the skilled survive!
                 </p>
-                
+
                 <div className="grid grid-cols-2 gap-2 mb-4">
                   <div className="stat bg-base-200/50 rounded-lg p-2">
                     <div className="stat-title text-xs">Min Stake</div>
@@ -286,9 +286,7 @@ const Home: NextPage = () => {
                 </div>
               </figure>
               <div className="card-body">
-                <h3 className="card-title text-xl mb-2">
-                  Crypto Shooter
-                </h3>
+                <h3 className="card-title text-xl mb-2">Crypto Shooter</h3>
                 <p className="text-sm text-base-content/70 mb-4">
                   Test your aim and reflexes in this fast-paced shooter. Coming soon with NFT weapon drops!
                 </p>
@@ -310,9 +308,7 @@ const Home: NextPage = () => {
                 </div>
               </figure>
               <div className="card-body">
-                <h3 className="card-title text-xl mb-2">
-                  Crypto Poker
-                </h3>
+                <h3 className="card-title text-xl mb-2">Crypto Poker</h3>
                 <p className="text-sm text-base-content/70 mb-4">
                   High-stakes poker tournaments with crypto buy-ins and massive prize pools.
                 </p>
@@ -331,21 +327,21 @@ const Home: NextPage = () => {
           <div className="bg-base-100 rounded-3xl p-8 shadow-xl">
             <h3 className="text-3xl font-bold text-center mb-8">Quick Actions</h3>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link 
-                href="/debug" 
+              <Link
+                href="/debug"
                 className="btn btn-outline btn-primary gap-2 shadow-md hover:shadow-lg transition-all duration-300"
               >
                 <CubeIcon className="h-5 w-5" />
                 Smart Contracts
               </Link>
-              <Link 
-                href="/blockexplorer" 
+              <Link
+                href="/blockexplorer"
                 className="btn btn-outline btn-secondary gap-2 shadow-md hover:shadow-lg transition-all duration-300"
               >
                 <ChartBarIcon className="h-5 w-5" />
                 Block Explorer
               </Link>
-              <button 
+              <button
                 className="btn btn-outline btn-accent gap-2 shadow-md hover:shadow-lg transition-all duration-300"
                 disabled={!connectedAddress}
               >

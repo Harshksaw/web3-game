@@ -1,20 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import { useState } from "react";
-import { 
+import {
   ArrowLeftIcon,
-  CurrencyDollarIcon, 
-  TrophyIcon,
-  PlayIcon,
-  ChartBarIcon,
   BoltIcon,
-  FireIcon
+  ChartBarIcon,
+  CurrencyDollarIcon,
+  FireIcon,
+  TrophyIcon,
 } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
 import TryHarderGame from "~~/components/TryHarderGame";
+import { Address } from "~~/components/scaffold-eth";
 
 const TryHarderPage: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -53,7 +52,6 @@ const TryHarderPage: NextPage = () => {
 
       <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          
           {/* Game Section - Takes up 2/3 width on xl screens */}
           <div className="xl:col-span-2">
             <div className="card bg-base-100 shadow-2xl">
@@ -90,9 +88,7 @@ const TryHarderPage: NextPage = () => {
                       <p className="text-base-content/70 mb-6">
                         You need to connect your wallet to stake and play games
                       </p>
-                      <button className="btn btn-primary btn-lg">
-                        Connect Wallet
-                      </button>
+                      <button className="btn btn-primary btn-lg">Connect Wallet</button>
                     </div>
                   ) : !isStaked ? (
                     <div className="text-center py-20">
@@ -106,19 +102,16 @@ const TryHarderPage: NextPage = () => {
                           <label className="label">
                             <span className="label-text">Stake Amount (ETH)</span>
                           </label>
-                          <input 
-                            type="number" 
+                          <input
+                            type="number"
                             value={stakeAmount}
-                            onChange={(e) => setStakeAmount(e.target.value)}
+                            onChange={e => setStakeAmount(e.target.value)}
                             className="input input-bordered input-primary"
                             min="0.005"
                             step="0.001"
                           />
                         </div>
-                        <button 
-                          className="btn btn-primary btn-lg w-full"
-                          onClick={handleStake}
-                        >
+                        <button className="btn btn-primary btn-lg w-full" onClick={handleStake}>
                           Stake {stakeAmount} ETH & Play
                         </button>
                       </div>
@@ -134,13 +127,12 @@ const TryHarderPage: NextPage = () => {
                           </div>
                           <div className="stat bg-base-200 rounded-lg p-3">
                             <div className="stat-title text-xs">Potential Reward</div>
-                            <div className="stat-value text-secondary text-sm">{(parseFloat(stakeAmount) * 3).toFixed(3)} ETH</div>
+                            <div className="stat-value text-secondary text-sm">
+                              {(parseFloat(stakeAmount) * 3).toFixed(3)} ETH
+                            </div>
                           </div>
                         </div>
-                        <button 
-                          className="btn btn-outline btn-error btn-sm"
-                          onClick={handleUnstake}
-                        >
+                        <button className="btn btn-outline btn-error btn-sm" onClick={handleUnstake}>
                           Unstake & Exit
                         </button>
                       </div>
@@ -158,7 +150,6 @@ const TryHarderPage: NextPage = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            
             {/* Game Stats */}
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
@@ -200,20 +191,27 @@ const TryHarderPage: NextPage = () => {
                     { rank: 3, address: "0xB78E...D143", time: "18.2s", level: 10, reward: "0.3 ETH" },
                     { rank: 4, address: "0x3C65...A829", time: "21.8s", level: 8, reward: "0.2 ETH" },
                     { rank: 5, address: "0x9D12...F567", time: "25.1s", level: 7, reward: "0.1 ETH" },
-                  ].map((player) => (
+                  ].map(player => (
                     <div key={player.rank} className="flex items-center justify-between p-2 bg-base-200/50 rounded">
                       <div className="flex items-center gap-2">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                          player.rank === 1 ? 'bg-yellow-500 text-white' :
-                          player.rank === 2 ? 'bg-gray-400 text-white' :
-                          player.rank === 3 ? 'bg-orange-600 text-white' :
-                          'bg-base-300'
-                        }`}>
+                        <div
+                          className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                            player.rank === 1
+                              ? "bg-yellow-500 text-white"
+                              : player.rank === 2
+                                ? "bg-gray-400 text-white"
+                                : player.rank === 3
+                                  ? "bg-orange-600 text-white"
+                                  : "bg-base-300"
+                          }`}
+                        >
                           {player.rank}
                         </div>
                         <div>
                           <div className="font-mono text-sm">{player.address}</div>
-                          <div className="text-xs text-base-content/70">L{player.level} • {player.time}</div>
+                          <div className="text-xs text-base-content/70">
+                            L{player.level} • {player.time}
+                          </div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -260,7 +258,6 @@ const TryHarderPage: NextPage = () => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
